@@ -90,6 +90,14 @@ limitations under the License. -->
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/value_pitch"/>
+
+        <TextView
+            android:id="@+id/label_sensor"
+            android:layout_width="75dp"
+            android:layout_height="29dp"
+            android:text="TextView"
+            tools:layout_editor_absoluteX="39dp"
+            tools:layout_editor_absoluteY="79dp" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>

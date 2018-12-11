@@ -676,6 +676,7 @@ id label_azimuth
 id label_group
 id label_pitch
 id label_roll
+id label_sensor
 id line1
 id line3
 id listMode

@@ -26,6 +26,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import static android.hardware.Sensor.TYPE_GYROSCOPE;
+
 public class MainActivity extends AppCompatActivity
         implements SensorEventListener {
 
@@ -33,14 +35,21 @@ public class MainActivity extends AppCompatActivity
     private SensorManager mSensorManager;
 
     // Accelerometer and magnetometer sensors, as retrieved from the
-    // sensor manager......... IS THIS IT???????
+    // sensor manager.
     private Sensor mSensorAccelerometer;
     private Sensor mSensorMagnetometer;
+    private Sensor mGyroscope; ///////////////
+    private String sensorName;
+
+    private float[] mAccelerometerData = new float[3];
+    private float[] mMagnetometerData = new float[3];
+
 
     // TextViews to display current sensor values.
     private TextView mTextSensorAzimuth;
     private TextView mTextSensorPitch;
     private TextView mTextSensorRoll;
+    private TextView mTextSensor;
 
     // Very small values for the accelerometer (on all three axes) should
     // be interpreted as 0. This value is the amount of acceptable
@@ -58,16 +67,20 @@ public class MainActivity extends AppCompatActivity
         mTextSensorAzimuth = (TextView) findViewById(R.id.value_azimuth);
         mTextSensorPitch = (TextView) findViewById(R.id.value_pitch);
         mTextSensorRoll = (TextView) findViewById(R.id.value_roll);
+        mTextSensor = (TextView) findViewById(R.id.label_sensor);
 
         // Get accelerometer and magnetometer sensors from the sensor manager.
         // The getDefaultSensor() method returns null if the sensor
         // is not available on the device.
         mSensorManager = (SensorManager) getSystemService(
                 Context.SENSOR_SERVICE);
+
         mSensorAccelerometer = mSensorManager.getDefaultSensor(
                 Sensor.TYPE_ACCELEROMETER);
         mSensorMagnetometer = mSensorManager.getDefaultSensor(
                 Sensor.TYPE_MAGNETIC_FIELD);
+
+        mGyroscope = mSensorManager.getDefaultSensor(TYPE_GYROSCOPE);
     }
 
     /**
@@ -105,6 +118,80 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
+
+        int sensorType = sensorEvent.sensor.getType();
+        sensorName = sensorEvent.sensor.getName();
+
+
+
+        switch (sensorType) {
+            case Sensor.TYPE_ACCELEROMETER:
+                mAccelerometerData = sensorEvent.values.clone();
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                mMagnetometerData = sensorEvent.values.clone();
+                break;
+            default:
+                mTextSensor.setText(sensorName);
+                return;
+        }
+
+        float[] rotationMatrix = new float[9];
+        boolean rotationOK = SensorManager.getRotationMatrix(rotationMatrix,
+                null, mAccelerometerData, mMagnetometerData);
+
+        float orientationValues[] = new float[3];
+        if (rotationOK) {
+            SensorManager.getOrientation(rotationMatrix, orientationValues);
+        }
+
+        float azimuth = orientationValues[0];
+        float pitch = orientationValues[1];
+        float roll = orientationValues[2];
+
+        mTextSensorAzimuth.setText(getResources().getString(
+                R.string.value_format, azimuth));
+        mTextSensorPitch.setText(getResources().getString(
+                R.string.value_format, pitch));
+        mTextSensorRoll.setText(getResources().getString(
+                R.string.value_format, roll));
+
+        if(Math.abs(roll) < 1.5){
+            mTextSensor.setText("forward");
+            //
+            //call method to go forward
+        }else if(Math.abs(roll) > 1.9){
+            mTextSensor.setText("backward");
+        }else{
+            mTextSensor.setText("stop");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Log.d(sensorName + ": X: " + sensorEvent.values[0] + "; Y: " + sensorEvent.values[1] + "; Z: " + sensorEvent.values[2] + ";");
+//        float azimuth = sensorEvent.values[0];
+//        String.format(".1f", azimuth);
+//        mTextSensorAzimuth.setText(String.format("%2.2f", azimuth));
+//
+//        float roll = sensorEvent.values[1];
+//        String.format(".1f", roll);
+//        mTextSensorRoll.setText(String.format("%2.2f", roll));
+//
+//
+//        float pitch = sensorEvent.values[2];
+//        String.format(".1f", pitch);
+//        mTextSensorPitch.setText(String.format("%2.2f", pitch));
     }
 
     /**
