@@ -24,6 +24,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
@@ -50,9 +52,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView mTextSensorPitch;
     private TextView mTextSensorRoll;
     private TextView mTextSensor;
+    private Button btn;
 
     private UAVInteraction drone;
     private ConnErrorDialog connErrorMessage;
+    private HoverButtonListener buttonListen;
 
     // Very small values for the accelerometer (on all three axes) should
     // be interpreted as 0. This value is the amount of acceptable
@@ -77,6 +81,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        //THIS METHOD IS CALLED EVERYTIME, for example killing app/change orientation => this is called again
+        //hence it may be bad to put the following code here, need futher investigation
+
         try {
             drone = new UAVInteraction();
             state = State.HOVER;
@@ -85,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             connErrorMessage = new ConnErrorDialog();
             //TO DO:    close app
         }
+
+
 
 
         super.onCreate(savedInstanceState);
@@ -97,19 +106,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mTextSensorPitch = (TextView) findViewById(R.id.value_pitch);
         mTextSensorRoll = (TextView) findViewById(R.id.value_roll);
         mTextSensor = (TextView) findViewById(R.id.label_sensor);
+        btn = (Button) findViewById(R.id.button);
 
         // Get accelerometer and magnetometer sensors from the sensor manager.
         // The getDefaultSensor() method returns null if the sensor
         // is not available on the device.
-        mSensorManager = (SensorManager) getSystemService(
-                Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        mSensorAccelerometer = mSensorManager.getDefaultSensor(
-                Sensor.TYPE_ACCELEROMETER);
-        mSensorMagnetometer = mSensorManager.getDefaultSensor(
-                Sensor.TYPE_MAGNETIC_FIELD);
-
-        //mGyroscope = mSensorManager.getDefaultSensor(TYPE_GYROSCOPE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //Handle the liftof
+            }
+        });
     }
 
 
@@ -186,22 +196,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             start = false;
         }
 
-        azimuth = orientationValues[0] - azimuthOffset;
+        azimuth = orientationValues[0] - azimuthOffset; //so it shows relative azimuth to the original value when app launched
         pitch = orientationValues[1];
-        roll = Math.abs(orientationValues[2]);
+        roll = Math.abs(orientationValues[2]); //so it doesnt matter how oriented is the phone (landscape with port to the left or right)
 
         mTextSensorAzimuth.setText(getResources().getString(R.string.value_format, azimuth));
         mTextSensorPitch.setText(getResources().getString(R.string.value_format, pitch));
         mTextSensorRoll.setText(getResources().getString(R.string.value_format, roll));
 
 
-        //PITCH 0,3
-
         processData();
     }
 
     private void processData() {
+
+        //params:  (tuneable above)
+        //          Offset from the middle positon - how far you have to tilt until drone begin to fly somewhere
+        //          Hysteresis - so it doesnt flicker ie. from forward to hover if the tilt is on the edge
+
+
+//        ConnErrorDialog die = new ConnErrorDialog();
+//        Bundle args = new Bundle();
+//        die.onCreateDialog(args);
+
+        //following code is maybe a little bit dumb, dunno how to do it better
         //TO DO: yet to implement rotation
+
         if (state == State.HOVER) {
             if (roll < (1.57 - OFFSETFROMMIDDLE)) {
                 drone.forward();
@@ -230,6 +250,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             }
         } else { //HYSTERESIS
+
+
+            //TO DO: (!!!) still flickers from forward to left etc. (!!!) opt. solution - you have to hover between changing states - especially for testing wouldnt be bad
+            //I think this code should be written better. :D
 
             if (roll < (1.57 - OFFSETFROMMIDDLE - HYSTERESIS)) {
                 drone.forward();

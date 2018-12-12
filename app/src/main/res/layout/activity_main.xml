@@ -13,13 +13,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. -->
 
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.android.tiltspot.MainActivity">
+
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="180dp"
+        android:layout_height="100dp"
+        android:text="You shall...                      Lift off!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/label_group"
@@ -28,50 +38,53 @@ limitations under the License. -->
         android:layout_margin="@dimen/base_margin"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.497">
+
 
         <!-- Labels -->
         <TextView
             android:id="@+id/label_azimuth"
+            style="@style/Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_azimuth_string"
-            style="@style/Label"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/label_group"/>
+            app:layout_constraintTop_toTopOf="@+id/label_group" />
 
         <TextView
             android:id="@+id/label_pitch"
+            style="@style/Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_pitch_string"
-            style="@style/Label"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_azimuth"/>
+            app:layout_constraintTop_toBottomOf="@id/label_azimuth" />
 
         <TextView
             android:id="@+id/label_roll"
+            style="@style/Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_roll_string"
-            style="@style/Label"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/label_pitch"/>
+            app:layout_constraintTop_toBottomOf="@id/label_pitch" />
 
         <!-- Values -->
         <TextView
             android:id="@+id/value_azimuth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/base_margin"
             android:layout_marginStart="@dimen/base_margin"
+            android:layout_marginLeft="@dimen/base_margin"
             android:text="@string/value_format"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintLeft_toRightOf="@id/label_azimuth"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/label_group"/>
+            app:layout_constraintTop_toTopOf="@+id/label_group" />
 
         <TextView
             android:id="@+id/value_pitch"
@@ -80,7 +93,7 @@ limitations under the License. -->
             android:text="@string/value_format"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/value_azimuth"/>
+            app:layout_constraintTop_toBottomOf="@id/value_azimuth" />
 
         <TextView
             android:id="@+id/value_roll"
@@ -89,16 +102,18 @@ limitations under the License. -->
             android:text="@string/value_format"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/value_pitch"/>
+            app:layout_constraintTop_toBottomOf="@id/value_pitch" />
 
         <TextView
             android:id="@+id/label_sensor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/value_roll"
-             />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/value_roll" />
     </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>
