@@ -13,6 +13,19 @@ buildscript {
     }
 }
 
+
+
+//repositories {
+//    mavenCentral()
+//    maven {
+//        url "http://clojars.org/repo/"
+//    }
+//}
+//dependencies {
+//    //compile fileTree(dir: 'libs', include: '*.jar')
+//    compile group: 'org.kryonet', name: 'kryonet', version: '2.21'
+//}
+
 allprojects {
     repositories {
         jcenter()

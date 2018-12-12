@@ -28,6 +28,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.esotericsoftware.kryonet.Server;
+
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     // System sensor manager instance.
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView mTextSensor;
     private Button btn;
 
+    private Server server;
     private UAVInteraction drone;
     private ConnErrorDialog connErrorMessage;
     private HoverButtonListener buttonListen;

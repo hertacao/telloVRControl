@@ -2,6 +2,9 @@ package com.example.android.tiltspot;
 
 public class UAVInteraction {
 
+    //TO DO: implement this. Found a library, link below
+    //...challenge is to edit the gradle build file correctly
+    //https://github.com/EsotericSoftware/kryonet
 
     public void land() {
     }
