@@ -678,6 +678,7 @@ id label_group
 id label_pitch
 id label_roll
 id label_sensor
+id label_state
 id line1
 id line3
 id listMode

@@ -28,10 +28,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.esotericsoftware.kryonet.Server;
+
 
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
+
+
 
     // System sensor manager instance.
     private SensorManager mSensorManager;
@@ -57,7 +59,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView mTextSensor;
     private Button btn;
 
-    private Server server;
     private UAVInteraction drone;
     private ConnErrorDialog connErrorMessage;
     private HoverButtonListener buttonListen;
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     // Very small values for the accelerometer (on all three axes) should
     // be interpreted as 0. This value is the amount of acceptable
     // non-zero drift.
-    private static final float VALUE_DRIFT = 0.05f;
+    // private static final float VALUE_DRIFT = 0.05f;      dont need this BS, my code is much better ofc
     private static final float HYSTERESIS = 0.05f;
     private static final float OFFSETFROMMIDDLE = 0.2f;
 
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     //methods
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -90,9 +90,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         try {
             drone = new UAVInteraction();
+            drone.hover();
             state = State.HOVER;
         } catch (Exception e) {
-            //idea of this is to close the app if we dont have connection
+            //idea of this is to close the app (or something..) if we dont have connection
             connErrorMessage = new ConnErrorDialog();
             //TO DO:    close app
         }
