@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -111,11 +112,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                //Handle the liftof
-//            }
-//        });
+        btn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    drone = new UAVInteraction();
+                    drone.connect();
+                } catch (Exception e) {
+                    //idea of this is to close the app (or something..) if we dont have connection
+                    System.out.println(e.getMessage());
+                    connErrorMessage = new ConnErrorDialog();
+                    //TO DO:    close app
+                }
+                //Handle the liftof
+            }
+        });
     }
 
 
@@ -126,15 +136,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStart() {
 
-        try {
-            drone = new UAVInteraction();
-            drone.hover();
-            state = State.HOVER;
-        } catch (Exception e) {
-            //idea of this is to close the app (or something..) if we dont have connection
-            connErrorMessage = new ConnErrorDialog();
-            //TO DO:    close app
-        }
+//        try {
+//            drone = new UAVInteraction();
+//            drone.connect();
+//            drone.hover();
+//            state = State.HOVER;
+//        } catch (Exception e) {
+//            //idea of this is to close the app (or something..) if we dont have connection
+//            System.out.println(e.getMessage());
+//            connErrorMessage = new ConnErrorDialog();
+//            //TO DO:    close app
+//        }
 
 
 

@@ -1,4 +1,4 @@
-#Mon Dec 24 11:31:19 CST 2018
+#Mon Dec 24 13:17:10 CST 2018
 base.0=C\:\\Users\\Marek\\AndroidStudioProjects\\android-advanced-starter-apps\\VRcontrolledDrone\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\5
 path.0=classes.dex
 renamed.0=classes.dex
