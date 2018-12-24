@@ -19,8 +19,7 @@ public class UAVInteraction {
     private Server server;
     private TextView mTextState;
 
-    public void land() {
-    }
+
 
     public void UAVInteraction() throws IOException {
 
@@ -69,5 +68,8 @@ public class UAVInteraction {
         String request = "takeoff";
         client.sendUDP(request);
 
+    }
+
+    public void land() {
     }
 }
