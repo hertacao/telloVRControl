@@ -12,7 +12,7 @@ import java.io.IOException;
 public class UAVInteraction {
 
     //TO DO: implement this. Found a library, link below
-    //...challenge is to edit the gradle build file correctly
+    //...challenge is to edit the gradle build file correctly - DONE
     //https://github.com/EsotericSoftware/kryonet
 
     private Client client;
@@ -43,24 +43,31 @@ public class UAVInteraction {
                 }
             }
         });
-
     }
 
 
 
     //methods yet to be implemented, basically just send UDP text commands from the sdk
     public void forward() {
+
     }
 
     public void backward() {
+
     }
 
     public void right() {
+
     }
 
     public void left() {
+
     }
 
-    public void hover() {
+    public void hover() { //lift off
+
+        String request = "takeoff";
+        client.sendUDP(request);
+
     }
 }

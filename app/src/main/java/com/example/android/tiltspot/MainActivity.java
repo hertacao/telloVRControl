@@ -88,15 +88,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         //THIS METHOD IS CALLED EVERYTIME, for example killing app/change orientation => this is called again
         //hence it may be bad to put the following code here, need futher investigation
 
-        try {
-            drone = new UAVInteraction();
-            drone.hover();
-            state = State.HOVER;
-        } catch (Exception e) {
-            //idea of this is to close the app (or something..) if we dont have connection
-            connErrorMessage = new ConnErrorDialog();
-            //TO DO:    close app
-        }
 
 
 
@@ -120,11 +111,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorMagnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //Handle the liftof
-            }
-        });
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                //Handle the liftof
+//            }
+//        });
     }
 
 
@@ -134,6 +125,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
      */
     @Override
     protected void onStart() {
+
+        try {
+            drone = new UAVInteraction();
+            drone.hover();
+            state = State.HOVER;
+        } catch (Exception e) {
+            //idea of this is to close the app (or something..) if we dont have connection
+            connErrorMessage = new ConnErrorDialog();
+            //TO DO:    close app
+        }
+
+
+
+
+
+
         super.onStart();
         // Listeners for the sensors are registered in this callback and
         // can be unregistered in onStop().
