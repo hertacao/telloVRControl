@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Marek\\AndroidStudioProjects\\android-advanced-starter-apps\\VRcontrolledDrone\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
+            "outputFile": "C:\\Users\\Herta\\AndroidStudioProjects\\VRcontrolledDrone11_12\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-hdpi-v4\\values-hdpi-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Marek\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.1.0.aar\\102cde70ef265f1996c0d6218d26a1aa\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
+                    "source": "C:\\Users\\Herta\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.1.0.aar\\c80f7fdf2a6fabfaf2aaf655d6107a73\\res\\values-hdpi-v4\\values-hdpi-v4.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

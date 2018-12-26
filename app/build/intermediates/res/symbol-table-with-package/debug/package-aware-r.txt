@@ -673,12 +673,12 @@ id ifRoom
 id image
 id info
 id italic
-id label_azimuth
+id label_displacement
 id label_group
+id label_movestate
 id label_pitch
 id label_roll
-id label_sensor
-id label_state
+id label_yaw
 id line1
 id line3
 id listMode
@@ -744,9 +744,9 @@ id topPanel
 id uniform
 id up
 id useLogo
-id value_azimuth
 id value_pitch
 id value_roll
+id value_yaw
 id withText
 id wrap
 id wrap_content

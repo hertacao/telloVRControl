@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\Users\\Marek\\AndroidStudioProjects\\android-advanced-starter-apps\\VRcontrolledDrone\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v16\\values-v16.xml",
+            "outputFile": "C:\\Users\\Herta\\AndroidStudioProjects\\VRcontrolledDrone11_12\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v16\\values-v16.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Marek\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\ec6250c8270879fa005d592eaf5c1624\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\Herta\\.gradle\\caches\\transforms-1\\files-1.1\\support-compat-26.1.0.aar\\3d3e887d4c767f86b8f225fb75b8eed9\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
@@ -14,7 +14,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Marek\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.1.0.aar\\102cde70ef265f1996c0d6218d26a1aa\\res\\values-v16\\values-v16.xml",
+                    "source": "C:\\Users\\Herta\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-26.1.0.aar\\c80f7fdf2a6fabfaf2aaf655d6107a73\\res\\values-v16\\values-v16.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",
