@@ -26,11 +26,15 @@ import android.widget.TextView;
 import java.util.Map;
 
 import sensor.SensorHandler;
-
+import translater.LinearMovementTranslator;
+import translater.MovementTranslator;
+import translater.SimpleMovementTranslator;
 
 public class MainActivity extends AppCompatActivity {
     private SensorHandler sensorHandler;
-    private SensorMovementTransformer transformer;
+    private MovementTranslator translator;
+
+    private TextView mTextStatus;
 
     private TextView mTextSensorYaw;
     private TextView mTextSensorPitch;
@@ -39,8 +43,16 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTextMoveDisplacement;
 
     private Button button;
+    private Button left;
+    private Button right;
+    private Button forward;
+    private Button back;
+    private Button land;
+    private Button takeOff;
 
-    private UAV drone = new UAV();
+    private UAV drone = new UAV(this);
+    boolean UAVconnected = false;
+    boolean UAVonAir = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         // Lock the orientation to landscape
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
+        mTextStatus = findViewById(R.id.label_status);
+
         // Link TextView to xml representation
         mTextSensorYaw = findViewById(R.id.value_yaw);
         mTextSensorPitch = findViewById(R.id.value_pitch);
@@ -63,47 +77,88 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.button);
 
+        left = findViewById(R.id.button_left);
+        right = findViewById(R.id.button_right);
+        forward = findViewById(R.id.button_forward);
+        back = findViewById(R.id.button_back);
+        land = findViewById(R.id.button_land);
+        takeOff = findViewById(R.id.button_takeOff);
+
         // SensorHandler computing everything related to Sensors
         sensorHandler = new SensorHandler(this);
 
         // Sensor to Movement Transformer
-        transformer = new SensorMovementTransformer(0.3f);
+        translator = new SimpleMovementTranslator(this,0.5f);
 
         // Single Button
-        button.setTag("Connect");
         button.setText("Connect");
+        button.setTag("connect");
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 final String status = (String) v.getTag();
-                try {
-                    drone.connect();
-                    sensorHandler.calibrate();
-
-                    /*if (status.equals("Connect")) {
+                switch(status) {
+                    case "connect":
+                        mTextStatus.setText("Connecting...");
                         drone.connect();
-                        sensorHandler.calibrate();
-                        button.setText("You shall...                      lift off!");
-                        v.setTag("Connected");
-                    } else if (status.equals("Connected")) {
-                        takeoff();
-                        button.setText("Land");
-                        v.setTag("Up");
-                    } else if (status.equals("Up")) {
-                        land();
-                        button.setText("You shall rise...                  again!");
-                        v.setTag("Connected");
-                    }*/
-                } catch (Exception e) {
-                    button.setText("Reconnect");
-                    //idea of this is to close the app (or something..) if we dont have connection
-                    System.out.println(e.getMessage());
-                    //connErrorMessage = new ConnErrorDialog();
-                    //TO DO:    close app
+                        connectSuccess(); // temporary
+                        break;
+                    case "connected": takeoff(); break;
+                    case "on air": land(); break;
+                    }
                 }
             }
-        });
-    }
+        );
 
+        left.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drone.left(30);
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drone.right(30);
+            }
+        });
+
+        forward.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drone.forward(30);
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drone.back(30);
+            }
+        });
+
+        land.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                land();
+            }
+        });
+
+        takeOff.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                takeoff();
+            }
+        });
+
+
+    }
+    /*private void exec(int i) {
+        switch (i) {
+            case 0: sensorHandler.calibrate(); mTextStatus.setText(TextArray[mIfCounter]);
+                button.setText(ButtonTextArray[mIfCounter]); //takeoff();
+            case 1: sensorHandler.resetOffset();  mTextStatus.setText(TextArray[mIfCounter]);
+                button.setText(ButtonTextArray[mIfCounter]) //drone.back(30);
+            case 2: sensorHandler.calibrate(); //drone.right(30); //land();
+            case 3: sensorHandler.resetOffset(); //drone.forward(30);
+            case 4: sensorHandler.calibrate(); //drone.left(30);
+            case 5: sensorHandler.resetOffset(); //land();
+        }
+    }*/
 
     /**
      * Listeners for the sensors are registered in this callback so that
@@ -134,10 +189,12 @@ public class MainActivity extends AppCompatActivity {
     public void update(Map<String, Float> sensorMap, MoveState moveState, float angle_diff) {
         this.updateSensorValue(sensorMap);
         this.updateMoveState(moveState);
-        float displacement = transformer.transform(moveState, angle_diff);
+        float displacement = translator.translate(moveState, angle_diff);
         this.updateDisplacement(displacement);
 
-        //this.moveDrone(moveState, displacement);
+        if(UAVconnected && UAVonAir) {
+            this.moveDrone(moveState, displacement);
+        }
     }
 
     private void updateSensorValue(Map<String, Float> sensorMap) {
@@ -154,28 +211,53 @@ public class MainActivity extends AppCompatActivity {
         mTextMoveDisplacement.setText(String.valueOf(displacement));
     }
 
+    public void connectError() {
+        mTextStatus.setText("Connection failed");
+        button.setText("Reconnect");
+    }
+
+    public void connectSuccess() {
+        UAVconnected = true;
+        mTextStatus.setText("Connection successful");
+        button.setText("You shall...                      lift off!");
+        button.setTag("connected");
+    }
     private void takeoff() {
         drone.takeoff();
         sensorHandler.start();
+        UAVonAir = true;
+        mTextStatus.setText("See I'm flying");
+        button.setText("Land");
+        button.setTag("on air");
     }
 
     private void land() {
         drone.land();
         sensorHandler.stop();
+        UAVonAir = false;
+        mTextStatus.setText("I'm down to earth");
+        button.setText("You shall rise...                  again!");
+        button.setTag("connected");
+    }
+
+    public int getDroneYaw() {
+        return drone.getYaw();
     }
 
     private void moveDrone(MoveState moveState, float displacement) {
         switch (moveState) {
+            case GROUND: {}
             case FORWARD:
                 drone.forward((int) displacement);
             case BACKWARD:
-                drone.backward((int) displacement);
-                //case ROTATERIGHT: drone.rotRight();
-                //case ROTATELEFT: drone.rotLeft();
+                drone.back((int) displacement);
+            //case ROTATERIGHT: drone.rotRight((int) displacement);
+            //case ROTATELEFT: drone.rotLeft((int) displacement);
             case LEFT:
                 drone.left((int) displacement);
             case RIGHT:
                 drone.right((int) displacement);
+            default: {} //drone.hover();
         }
     }
 }

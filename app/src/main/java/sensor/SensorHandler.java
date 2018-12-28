@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 public class SensorHandler implements SensorEventListener {
-    private MainActivity mContext;
+    private MainActivity activity;
 
     // Very small values for the accelerometer (on all three axes) should
     // be interpreted as 0. This value is the amount of acceptable
@@ -23,7 +23,7 @@ public class SensorHandler implements SensorEventListener {
     private static final float HYSTERESIS = 0.05f;
     private static final float FORWARD_OFFSET = 0.3f;
     private static final float BACKWARD_OFFSET = 0.4f;
-    private static final float ROTATION_OFFSET = 0.2f;
+    private static final float ROTATION_OFFSET = 0.15f;
     private static final float SIDEMOVE_OFFSET = 0.35f;
 
     private static final float CALIBRATION_OFFSET = 0.2f;
@@ -49,10 +49,10 @@ public class SensorHandler implements SensorEventListener {
     //
     private float angle_diff;
 
-    public SensorHandler(MainActivity mContext) {
-        this.mContext = mContext;
+    public SensorHandler(MainActivity activity) {
+        this.activity = activity;
 
-        mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
+        mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         if(mSensorManager != null) {
             sensorStrategy = new RotationVector(mSensorManager);
         } else {
@@ -82,7 +82,7 @@ public class SensorHandler implements SensorEventListener {
         this.transformOrientationToLandscape(sensorMap);
 
         computeState();
-        mContext.update(landscapeSensorMap, moveState, angle_diff);
+        activity.update(landscapeSensorMap, moveState, angle_diff);
     }
 
     public void start() {
@@ -95,7 +95,7 @@ public class SensorHandler implements SensorEventListener {
         this.moveState = MoveState.GROUND;
     }
 
-    public void calibrate() {
+    private void calibrate() {
         yaw_Offset = landscapeSensorMap.get("yaw");
         lastYaw = yaw_Offset;
         
@@ -141,7 +141,7 @@ public class SensorHandler implements SensorEventListener {
         float roll = landscapeSensorMap.get("roll");
 
         float hysteresis;
-        if (moveState == MoveState.HOVER||moveState == MoveState.GROUND) {
+        if (moveState == MoveState.HOVER) {
             hysteresis = 0;
         } else {
             hysteresis = HYSTERESIS;
@@ -159,16 +159,15 @@ public class SensorHandler implements SensorEventListener {
             moveState = MoveState.BACKWARD;
             angle_diff = Math.abs(pitch) - BACKWARD_OFFSET;
 
-        /*} else if (yaw < lastYaw - ROTATION_OFFSET) {
+        } else if (yaw < (lastYaw - ROTATION_OFFSET + hysteresis)) {
             moveState = MoveState.ROTATELEFT;
-            angle_diff = Math.abs(yaw) - ROTATION_OFFSET;
-            //lastYaw = yaw;
+            angle_diff = yaw;
+            lastYaw = yaw;
 
-        } else if (yaw > lastYaw + ROTATION_OFFSET) {
+        } else if (yaw > (lastYaw + ROTATION_OFFSET - hysteresis)) {
             moveState = MoveState.ROTATERIGHT;
-            angle_diff = Math.abs(yaw) - ROTATION_OFFSET;
-            //lastYaw = yaw;
-         */
+            angle_diff = yaw;
+            lastYaw = yaw;
 
         } else if (roll < -(SIDEMOVE_OFFSET - hysteresis)) {
             moveState = MoveState.RIGHT;
@@ -182,7 +181,6 @@ public class SensorHandler implements SensorEventListener {
             moveState = MoveState.HOVER;
             angle_diff = 0;
         }
-
     }
 
     private void transformOrientationToLandscape(Map<String, Float> sensorMap) {
