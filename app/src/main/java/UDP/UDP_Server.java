@@ -33,7 +33,7 @@ public class UDP_Server {
 
     public void stopUDPServer() {
         if(async_server != null) {
-            async_server.isActiv = false;
+            async_server.isActive = false;
         }
     }
 
@@ -44,8 +44,8 @@ public class UDP_Server {
     private static class MyTask extends AsyncTask<Void, Void, String> {
         private AsyncResponse delegate;
         private String serverString;
-        private int port = 8889;
-        boolean isActiv = true;
+        private int port;
+        boolean isActive = true;
         private String ACTION_STRING;
 
         private MyTask(AsyncResponse delegate, String serverString, int port, String ACTION_STRING) {
@@ -67,7 +67,7 @@ public class UDP_Server {
                 DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
                 return new String(buffer, 0, packet.getLength());
 
-                /*while(serverIsActiv)
+                /*while(isActive)
                 {
                     socket.receive(packet);
 
