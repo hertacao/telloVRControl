@@ -1,7 +1,7 @@
 package com.example.android.main;
 
-import UDP.UDP_Client;
-import UDP.UDP_Server;
+import com.example.android.main.UDP.UDP_Client;
+import com.example.android.main.UDP.UDP_Server;
 
 public class UAV implements AsyncResponse {
     private MainActivity activity;
@@ -26,7 +26,7 @@ public class UAV implements AsyncResponse {
         client.send();
     }
 
-    //methods yet to be implemented, basically just send UDP text commands from the sdk
+    //methods yet to be implemented, basically just send com.example.android.main.UDP text commands from the sdk
     void land() {
         client.message = "land";
         client.send();

@@ -25,10 +25,9 @@ import android.widget.TextView;
 
 import java.util.Map;
 
-import sensor.SensorHandler;
-import translater.LinearMovementTranslator;
-import translater.MovementTranslator;
-import translater.SimpleMovementTranslator;
+import com.example.android.main.sensor.SensorHandler;
+import com.example.android.main.translater.MovementTranslator;
+import com.example.android.main.translater.SimpleMovementTranslator;
 
 public class MainActivity extends AppCompatActivity {
     private SensorHandler sensorHandler;
@@ -181,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onStop();
 
-        // Unregister all sensor listeners in this callback so they don't
+        // Unregister all com.example.android.main.sensor listeners in this callback so they don't
         // continue to use resources when the app is stopped.
         sensorHandler.unregisterSensor();
     }

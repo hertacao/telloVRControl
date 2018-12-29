@@ -1,4 +1,4 @@
-package sensor;
+package com.example.android.main.sensor;
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -34,7 +34,7 @@ public class SensorHandler implements SensorEventListener {
 
     private float lastYaw;
 
-    // System sensor manager instance.
+    // System com.example.android.main.sensor manager instance.
     private SensorManager mSensorManager;
 
     // Strategy that is being used to compute yaw, pitch, roll

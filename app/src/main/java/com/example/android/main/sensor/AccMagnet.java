@@ -1,4 +1,4 @@
-package sensor;
+package com.example.android.main.sensor;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AccMagnet implements SensorStrategy {
-    // Accelerometer and magnetometer sensors, as retrieved from the sensor manager.
+    // Accelerometer and magnetometer sensors, as retrieved from the com.example.android.main.sensor manager.
     private Sensor mSensorAccelerometer;
     private Sensor mSensorMagnetometer;
 
@@ -24,8 +24,8 @@ public class AccMagnet implements SensorStrategy {
     private Map<String, Float> sensorMap = new HashMap<>();
 
     public AccMagnet(SensorManager mSensorManager) {
-        // Get accelerometer and magnetometer sensors from the sensor manager.
-        // The getDefaultSensor() method returns null if the sensor
+        // Get accelerometer and magnetometer sensors from the com.example.android.main.sensor manager.
+        // The getDefaultSensor() method returns null if the com.example.android.main.sensor
         // is not available on the device.
         mSensorAccelerometer = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_ACCELEROMETER);
         mSensorMagnetometer = mSensorManager.getDefaultSensor(android.hardware.Sensor.TYPE_MAGNETIC_FIELD);

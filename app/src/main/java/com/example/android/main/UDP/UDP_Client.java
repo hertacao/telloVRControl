@@ -1,4 +1,4 @@
-package UDP;
+package com.example.android.main.UDP;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

@@ -1,4 +1,4 @@
-package sensor;
+package com.example.android.main.sensor;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class RotationVector implements SensorStrategy {
-    // Accelerometer and magnetometer sensors, as retrieved from the sensor manager.
+    // Accelerometer and magnetometer sensors, as retrieved from the com.example.android.main.sensor manager.
     private Sensor mSensorRotationVector;
 
     // Sensor Values, Rotation vector component along the x,y,z axis (x,y,z * sin(θ/2)), unitless, -1.0 to +1.0
