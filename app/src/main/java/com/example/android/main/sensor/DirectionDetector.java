@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SensorHandler implements SensorEventListener {
+public class DirectionDetector implements SensorEventListener {
     private MainActivity activity;
 
     // Very small values for the accelerometer (on all three axes) should
@@ -47,9 +47,9 @@ public class SensorHandler implements SensorEventListener {
     private MoveState moveState = MoveState.GROUND;
 
     //
-    private float angle_diff;
+    private float angle;
 
-    public SensorHandler(MainActivity activity) {
+    public DirectionDetector(MainActivity activity) {
         this.activity = activity;
 
         mSensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
@@ -58,6 +58,7 @@ public class SensorHandler implements SensorEventListener {
         } else {
             System.out.println("ERROR: no SensorManager");
         }
+
     }
 
     public void registerSensor() {
@@ -82,7 +83,7 @@ public class SensorHandler implements SensorEventListener {
         this.transformOrientationToLandscape(sensorMap);
 
         computeState();
-        activity.update(landscapeSensorMap, moveState, angle_diff);
+        activity.update(landscapeSensorMap, moveState, angle);
     }
 
     public void start() {
@@ -151,35 +152,38 @@ public class SensorHandler implements SensorEventListener {
         //TO DO: (!!!) still flickers from forward to left etc. (!!!) opt. solution - you have to hover between changing states - especially for testing wouldnt be bad
         //I think this code should be written better. :D
 
-        if (pitch > (FORWARD_OFFSET - hysteresis)) {
-            moveState = MoveState.FORWARD;
-            angle_diff = Math.abs(pitch) - FORWARD_OFFSET;
 
-        } else if (pitch < -(BACKWARD_OFFSET - hysteresis)) {
-            moveState = MoveState.BACKWARD;
-            angle_diff = Math.abs(pitch) - BACKWARD_OFFSET;
-
-        } else if (yaw < (lastYaw - ROTATION_OFFSET + hysteresis)) {
-            moveState = MoveState.ROTATELEFT;
-            angle_diff = yaw;
-            lastYaw = yaw;
-
-        } else if (yaw > (lastYaw + ROTATION_OFFSET - hysteresis)) {
-            moveState = MoveState.ROTATERIGHT;
-            angle_diff = yaw;
-            lastYaw = yaw;
-
-        } else if (roll < -(SIDEMOVE_OFFSET - hysteresis)) {
+        if (roll < -(SIDEMOVE_OFFSET - hysteresis)) {
             moveState = MoveState.RIGHT;
-            angle_diff = Math.abs(roll) - SIDEMOVE_OFFSET;
+            angle = Math.abs(roll) - SIDEMOVE_OFFSET;
 
         } else if (roll > (SIDEMOVE_OFFSET - hysteresis)) {
             moveState = MoveState.LEFT;
-            angle_diff = Math.abs(roll) - SIDEMOVE_OFFSET;
+            angle = Math.abs(roll) - SIDEMOVE_OFFSET;
+
+        } else if (pitch > (FORWARD_OFFSET - hysteresis)) {
+            moveState = MoveState.FORWARD;
+            angle = Math.abs(pitch) - FORWARD_OFFSET;
+
+        } else if (pitch < -(BACKWARD_OFFSET - hysteresis)) {
+            moveState = MoveState.BACKWARD;
+            angle = Math.abs(pitch) - BACKWARD_OFFSET;
+
+            // negative yaw
+        } else if (yaw < (lastYaw - ROTATION_OFFSET + hysteresis)) {
+            moveState = MoveState.ROTATELEFT;
+            angle = yaw;
+            lastYaw = yaw;
+
+            // positive yaw
+        } else if (yaw > (lastYaw + ROTATION_OFFSET - hysteresis)) {
+            moveState = MoveState.ROTATERIGHT;
+            angle = yaw;
+            lastYaw = yaw;
 
         } else {
             moveState = MoveState.HOVER;
-            angle_diff = 0;
+            angle = 0;
         }
     }
 

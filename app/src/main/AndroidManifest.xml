@@ -24,12 +24,22 @@ limitations under the License. -->
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.example.android.main.MainActivity">
+            android:label="@string/app_name">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <receiver android:name="com.example.android.main.UAV"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="a ndroid.intent.action.RUN" />
+                <action android:name="com.example.android.main.COMMAND" />
+                <action android:name="com.example.android.main.STATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

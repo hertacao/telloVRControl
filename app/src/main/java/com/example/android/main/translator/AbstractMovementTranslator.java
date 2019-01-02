@@ -1,4 +1,4 @@
-package com.example.android.main.translater;
+package com.example.android.main.translator;
 
 import com.example.android.main.MainActivity;
 
@@ -19,13 +19,24 @@ abstract class AbstractMovementTranslator implements MovementTranslator {
         }
     }
 
-    float computeRot(float angle) {
+    float computeRightRot(float angle) {
         int droneYaw = activity.getDroneYaw();
-        float rotDiff = abs(angle) - abs(droneYaw);
+        float rotDiff = angle - droneYaw;
         if (rotDiff > 0) {
             return rotDiff;
         } else {
             return 0;
         }
     }
+
+    float computeLeftRot(float angle) {
+        int droneYaw = activity.getDroneYaw();
+        float rotDiff = angle - droneYaw;
+        if (rotDiff < 0) {
+            return abs(rotDiff);
+        } else {
+            return 0;
+        }
+    }
+
 }

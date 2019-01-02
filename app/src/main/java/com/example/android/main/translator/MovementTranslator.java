@@ -1,4 +1,4 @@
-package com.example.android.main.translater;
+package com.example.android.main.translator;
 
 import com.example.android.main.MoveState;
 

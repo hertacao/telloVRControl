@@ -1,4 +1,4 @@
-package com.example.android.main.translater;
+package com.example.android.main.translator;
 
 import com.example.android.main.MainActivity;
 import com.example.android.main.MoveState;
@@ -6,8 +6,6 @@ import com.example.android.main.MoveState;
 import static java.lang.StrictMath.abs;
 
 public class LinearMovementTranslator extends AbstractMovementTranslator {
-    private MainActivity activity;
-    private float speed;
 
     public LinearMovementTranslator(MainActivity activity, float speed) {
         super(activity, speed);
@@ -17,8 +15,8 @@ public class LinearMovementTranslator extends AbstractMovementTranslator {
         switch(moveState) {
             case HOVER: return 1;
             case GROUND: return 0;
-            case ROTATELEFT: return computeRot(angle);
-            case ROTATERIGHT: return computeRot(angle);
+            case ROTATELEFT: return computeLeftRot(angle);
+            case ROTATERIGHT: return computeRightRot(angle);
 
             default:
                 if(angle > moveState.getAngleMAX()) {
