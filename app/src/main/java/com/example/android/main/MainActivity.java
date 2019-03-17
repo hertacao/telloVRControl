@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,7 +32,7 @@ import com.example.android.main.translator.MovementTranslator;
 import com.example.android.main.translator.SimpleMovementTranslator;
 
 public class MainActivity extends AppCompatActivity {
-    private static final int COMMAND_FREQUENCY = 3;
+    private static final int COMMAND_FREQUENCY = 1;
     private static Context context;
 
     private DirectionDetector directionDetector;
@@ -203,12 +204,12 @@ public class MainActivity extends AppCompatActivity {
         float displacement = translator.translate(moveState, angle_diff);
         this.updateDisplacement(displacement);
 
-        if(UAVconnected && UAVonAir && updateCounter == 0) {
+        if(UAVconnected && UAVonAir) {
             this.moveDrone(moveState, displacement);
-            this.updateCounter = 0;
+            //this.updateCounter = 0;
         }
 
-        updateCounter = (updateCounter+1)%COMMAND_FREQUENCY;
+        //updateCounter = (updateCounter+1)%COMMAND_FREQUENCY;
     }
 
     private void updateSensorValue(Map<String, Float> sensorMap) {
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
     public static void connectError() {
         mTextStatus.setText("Connection failed");
         button.setText("Reconnect");
+        Log.i("UAV:", "connection failed");
     }
 
     public static void connectSuccess() {
@@ -263,7 +265,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void moveDrone(MoveState moveState, float displacement) {
-        drone.move(moveState, displacement);
+        if (!drone.isBusy()) {
+            drone.setBusy(true);
+            drone.move(moveState, displacement);
+        }
     }
 
     public static TextView getmTextOther() {

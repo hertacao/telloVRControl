@@ -1,8 +1,11 @@
 package com.example.android.main;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum MoveState {
     FORWARD (20.0f, 500.0f, (float) Math.PI/2),
-    BACKWARD (20.0f, 500.0f, (float) Math.PI/2),
+    BACK (20.0f, 500.0f, (float) Math.PI/2),
     LEFT (20.0f, 500.0f, (float) Math.PI/2),
     RIGHT (20.0f, 500.0f, (float) Math.PI/2),
     ROTATELEFT (1.0f, 360.0f, 0.0f),
@@ -19,7 +22,7 @@ public enum MoveState {
     public float MIN;
     public float MAX;
     public float angleMAX;
-
+    
     public float getMIN(){ return this.MIN; }
     public float getMAX(){ return this.MAX; }
     public float getAngleMAX(){ return this.angleMAX; }

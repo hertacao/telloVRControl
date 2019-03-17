@@ -18,9 +18,6 @@ public class UDP_Client {
     private int port;
     private String INTENT_ACTION = Intent.ACTION_RUN;
     public String message = "command";
-    public String MESSAGE_TYPE = "command";
-    private String DATA_TYPE = "command";
-
 
     public UDP_Client(String serverString, int port) {
         this.serverString = serverString;
@@ -31,13 +28,9 @@ public class UDP_Client {
         this.INTENT_ACTION = intentAction;
     }
 
-    public void setDATA_TYPE(String dataType) {
-        this.DATA_TYPE = dataType;
-    }
-
     @SuppressLint("NewApi")
     public void send() {
-        AsyncTask<Void, Void, String> async_client = new MyTask(INTENT_ACTION, DATA_TYPE, MESSAGE_TYPE, serverString, port, message);
+        AsyncTask<Void, Void, String> async_client = new MyTask(INTENT_ACTION, serverString, port, message);
 
         if (Build.VERSION.SDK_INT >= 11) async_client.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         else async_client.execute();
@@ -45,17 +38,13 @@ public class UDP_Client {
 
     public static class MyTask extends AsyncTask<Void, Void, String> {
         private String INTENT_ACTION;
-        private String DATA_TYPE;
-        private String MESSAGE_TYPE;
         private String serverString;
         private int port;
         private String message;
 
-        private MyTask(String INTENT_ACTION, String DATA_TYPE, String MESSAGE_TYPE, String serverString, int port, String message) {
+        private MyTask(String INTENT_ACTION, String serverString, int port, String message) {
             super();
             this.INTENT_ACTION = INTENT_ACTION;
-            this.DATA_TYPE = DATA_TYPE;
-            this.MESSAGE_TYPE = MESSAGE_TYPE;
             this.serverString = serverString;
             this.port = port;
             this.message = message;
@@ -100,12 +89,11 @@ public class UDP_Client {
             }
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String reply) {
             Intent intent = new Intent(INTENT_ACTION);
-            intent.putExtra(DATA_TYPE, MESSAGE_TYPE);
-            intent.putExtra("reply", result);
+            intent.putExtra("message", message);
+            intent.putExtra("reply", reply);
             MainActivity.getAppContext().sendBroadcast(intent);
-            MainActivity.getmTextOther().setText(result);
         }
     }
 }

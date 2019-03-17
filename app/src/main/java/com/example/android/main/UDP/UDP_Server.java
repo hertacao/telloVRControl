@@ -2,7 +2,6 @@ package com.example.android.main.UDP;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
 
-import com.example.android.main.AsyncResponse;
 import com.example.android.main.MainActivity;
 
 public class UDP_Server {

@@ -21,8 +21,8 @@ public class DirectionDetector implements SensorEventListener {
     // non-zero drift.
     // private static final float VALUE_DRIFT = 0.05f;      don't need this BS, my code is much better ofc
     private static final float HYSTERESIS = 0.05f;
-    private static final float FORWARD_OFFSET = 0.3f;
-    private static final float BACKWARD_OFFSET = 0.4f;
+    private static final float FORWARD_OFFSET = 0.35f;
+    private static final float BACK_OFFSET = 0.4f;
     private static final float ROTATION_OFFSET = 0.15f;
     private static final float SIDEMOVE_OFFSET = 0.35f;
 
@@ -165,9 +165,9 @@ public class DirectionDetector implements SensorEventListener {
             moveState = MoveState.FORWARD;
             angle = Math.abs(pitch) - FORWARD_OFFSET;
 
-        } else if (pitch < -(BACKWARD_OFFSET - hysteresis)) {
-            moveState = MoveState.BACKWARD;
-            angle = Math.abs(pitch) - BACKWARD_OFFSET;
+        } else if (pitch < -(BACK_OFFSET - hysteresis)) {
+            moveState = MoveState.BACK;
+            angle = Math.abs(pitch) - BACK_OFFSET;
 
             // negative yaw
         } else if (yaw < (lastYaw - ROTATION_OFFSET + hysteresis)) {

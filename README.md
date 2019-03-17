@@ -16,10 +16,10 @@ Pre-requisites
 
 For this app you should be familiar with:
 * Creating, building, and running apps in Android Studio.
-* Using the Android sensor framework to gain access to available sensors on the device, 
+* Using the Android com.example.android.main.sensor framework to gain access to available sensors on the device, 
 and to register and unregister listeners for those sensors.
 * Using the onSensorChanged() method from the SensorEventListener interface to handle 
-changes to sensor data.
+changes to com.example.android.main.sensor data.
 
 
 Getting Started

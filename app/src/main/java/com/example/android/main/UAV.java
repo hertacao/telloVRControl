@@ -27,6 +27,16 @@ public class UAV extends BroadcastReceiver {
     private int vgz;
     private int h;
 
+    public boolean isBusy() {
+        return busy;
+    }
+
+    public void setBusy(boolean busy) {
+        this.busy = busy;
+    }
+
+    private boolean busy = false;
+
     public UAV() {
 
     }
@@ -34,8 +44,6 @@ public class UAV extends BroadcastReceiver {
     void connect() {
         client = new UDP_Client(COMMAND_SERVER, COMMAND_PORT);
         client.setINTENT_ACTION(COMMAND);
-        client.setDATA_TYPE("command");
-        client.MESSAGE_TYPE = "connect";
         client.message = "command";
         client.send();
 
@@ -49,28 +57,38 @@ public class UAV extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
         Log.i("UAV:", action);
-        if (action.equals(STATE) || action.equals(Intent.ACTION_RUN)) {
-            String received = intent.getStringExtra("state");
-            Log.i("UAV: Action.STATE", received);
-            parse(received);
-            //MainActivity.getmTextOther().setText(String.valueOf(this.getYaw()));
-            //activity.updateOther(String.valueOf(yaw));
 
-        } else if (action.equals(COMMAND)) {
-            String messageType = intent.getStringExtra("command");
+        if (action.equals(COMMAND)) {
+            String message = intent.getStringExtra("message");
             String reply = intent.getStringExtra("reply");
-
-            if (messageType.equals("connect")) {
+            Log.i("UAV:", "in command");
+            if (message.equals("connect")) {
+                Log.i("UAV:", "connecting");
                 if (reply.equals("ok")) {
                     MainActivity.connectSuccess();
+                    MainActivity.getmTextOther().setText(reply);
+                    Log.i("UAV:", "connection successful");
                 } else if (reply.equals("error")) {
                     MainActivity.connectError();
+                    Log.i("UAV:", "connection failed");
                 } else {
                     //activity.error();
                 }
-            } /*else {
-
-            }*/
+            } else {
+                if (reply.equals("ok")) {
+                    busy = false;
+                } else if (reply.equals("error")) {
+                    client.message = message;
+                    client.send();
+                } else {
+                    //activity.error();
+                }
+            }
+        } else if (action.equals(STATE) || action.equals(Intent.ACTION_RUN)) {
+            String received = intent.getStringExtra("state");
+            Log.i("UAV: Action.STATE", received);
+            parse(received);
+            MainActivity.getmTextOther().setText(String.valueOf(this.getYaw()));
         }
     }
 
@@ -79,7 +97,7 @@ public class UAV extends BroadcastReceiver {
             case GROUND: {}
             case FORWARD:
                 this.forward((int) displacement);
-            case BACKWARD:
+            case BACK:
                 this.back((int) displacement);
             case ROTATERIGHT:
                 this.rotRight((int) displacement);
@@ -96,54 +114,45 @@ public class UAV extends BroadcastReceiver {
 
     //methods yet to be implemented, basically just send com.example.android.main.UDP text commands from the sdk
     void land() {
-        client.MESSAGE_TYPE = "land";
         client.message = "land";
         client.send();
     }
 
     void takeoff() {
-        client.MESSAGE_TYPE = "takeoff";
         client.message = "takeoff";
         client.send();
     }
     void forward(int x) {
-        client.MESSAGE_TYPE = "forward";
         client.message = "forward " + x;
         client.send();
     }
 
     void back(int x) {
-        client.MESSAGE_TYPE = "back";
         client.message = "back " + x;
         client.send();
     }
 
     void right(int x) {
-        client.MESSAGE_TYPE = "right";
         client.message = "right " + x;
         client.send();
     }
 
     void left(int x) {
-        client.MESSAGE_TYPE = "left";
         client.message = "left " + x;
         client.send();
     }
 
     void rotRight(int x) {
-        client.MESSAGE_TYPE = "rotRight";
         client.message = "cw " + x;
         client.send();
     }
 
     void rotLeft(int x) {
-        client.MESSAGE_TYPE = "rotLeft";
         client.message = "ccw " + x;
         client.send();
     }
 
     void hover() { //lift off
-        client.MESSAGE_TYPE = "hover";
         client.message = "stop";
         client.send();
     }
